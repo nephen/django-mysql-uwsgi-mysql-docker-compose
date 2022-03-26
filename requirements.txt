@@ -1,0 +1,8 @@
+Django
+mysqlclient
+pymysql
+djangorestframework
+django-crontab
+django-mysql
+Pillow
+uwsgi

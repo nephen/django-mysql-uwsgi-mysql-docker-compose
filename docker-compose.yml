@@ -1,0 +1,53 @@
+version: '3'
+   
+services:
+  db:
+    image: mysql
+    container_name: mysql
+    volumes:
+      - ./data/db:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=mysql
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - LANG=C.UTF-8
+  django:
+    build: .
+    container_name: django 
+    volumes:
+      - .:/code
+    command: sh -c "/code/tools/wait-for.sh db:3306 -- /code/tools/start-django.sh ${COMPOSE_PROFILES}"
+    #command: sh -c "/code/tools/start-django.sh ${COMPOSE_PROFILES}"
+    restart: always
+    ports:
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
+    environment:
+      - MYSQL_NAME=mysql
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_HOST=db
+      - TZ=Asia/Shanghai
+      - DJANGO_PORT=${DJANGO_PORT}
+    depends_on:
+      - db
+  nginx:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - .:/code
+      - ./conf/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./conf/conf.d:/etc/nginx/conf.d
+    profiles:
+      - release
+    restart: always
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
+    depends_on:
+      - django

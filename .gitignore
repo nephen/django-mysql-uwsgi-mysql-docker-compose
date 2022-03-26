@@ -1,0 +1,4 @@
+data/
+static/
+uwsgi.log
+uwsgi.pid
