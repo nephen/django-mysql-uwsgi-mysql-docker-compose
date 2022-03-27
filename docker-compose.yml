@@ -32,6 +32,7 @@ services:
       - MYSQL_HOST=db
       - TZ=Asia/Shanghai
       - DJANGO_PORT=${DJANGO_PORT}
+      - DJANGO_PROJECT_NAME=${DJANGO_PROJECT_NAME}
     depends_on:
       - db
   nginx:
@@ -39,7 +40,7 @@ services:
     container_name: nginx
     volumes:
       - .:/code
-      - ./conf/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./conf/templates:/etc/nginx/templates
       - ./conf/conf.d:/etc/nginx/conf.d
     profiles:
       - release
