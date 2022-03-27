@@ -71,13 +71,17 @@ Then start to start. If you find that there are no dependent files, you need to 
 $ docker-compose up
 $ vi requirements.txt // Install dependencies if needed
 $ docker-compose build
+```
 
 ## Troubleshooting
 ### How to ensure that django starts working after mysql starts normally?
-Refer to the wait-for scheme given by this website: https://docs.docker.com/compose/startup-order/, The github address is https://github.com/eficode/wait-for
+Refer to the wait-for scheme given by this website: https://docs.docker.com/compose/startup-order/, The github address is https://github.com/eficode/wait-for, It will wait for mysql to start normally before starting django
 
 ### How to modify or increase the nginx configuration file？
 You can modify or add the template file in the conf/templates directory. The shell environment variable can be used in this file.
+
+### What should I do if the startup fails?
+Try restarting to see if it works, otherwise you can help to raise issues
 
 ## Warnings
 The data of mysql is generated in data. If you need to clear the data, just delete the folder, but you need to be careful.
